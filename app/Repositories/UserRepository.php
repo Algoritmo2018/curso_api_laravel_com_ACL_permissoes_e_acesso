@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use App\DTO\Users\CreateUserDTO;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -22,5 +23,12 @@ class UserRepository
             }
 
         })->paginate($totalPerPage, ['*'], 'page', $page);
+    }
+
+    public function createNew(CreateUserDTO $dto): User
+    {
+        $data = (array) $dto;
+        $data['password'] = bcrypt($data['password']);
+return $this->user->create($data);
     }
 }
