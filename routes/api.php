@@ -11,8 +11,8 @@ Route::post('/logout', [AuthApiController::class, 'logout'])->name('auth.logout'
 Route::post('/auth', [AuthApiController::class, 'auth'])->name('auth.login');
 
 
-
-Route::apiResource('/permissions', PermissionController::class);
+Route::middleware(['auth:sanctum'])->group(function (){
+    Route::apiResource('/permissions', PermissionController::class);
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
@@ -20,5 +20,8 @@ Route::put('/users/{user}', [UserController::class, 'update'])->name('users.upda
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
+});
+
+
 
 Route::get('/', fn () => response()->json(['message' => 'ok']));
