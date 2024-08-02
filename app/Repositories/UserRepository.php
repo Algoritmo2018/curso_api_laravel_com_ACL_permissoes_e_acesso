@@ -21,7 +21,9 @@ class UserRepository
             if ($filter !== '') {
                 $query->where('name', 'LIKE', "%{$filter}%");
             }
-        })->paginate($totalPerPage, ['*'], 'page', $page);
+        })
+        ->with(['permissions'])
+        ->paginate($totalPerPage, ['*'], 'page', $page);
     }
 
     public function createNew(CreateUserDTO $dto): User
@@ -67,5 +69,10 @@ class UserRepository
         }
         $user->permissions()->sync($permissions);
         return true;
+    }
+
+    public function getPermissionsByUserId(string $user)
+    {
+return $this->findById($user)->permissions()->get();
     }
 }
