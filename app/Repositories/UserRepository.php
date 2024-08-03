@@ -77,7 +77,10 @@ return $this->findById($user)->permissions()->get();
     }
 
     public function hasPermissions(User $user, String $permissionName): bool
-    {
+    { 
+        if($user->isSuperAdmin()){
+            return true;
+        }
         return $user->permissions()->where('name', $permissionName)->exists();
     }
 }
